@@ -5,6 +5,7 @@ dotenv.config();
 
 import connectDB from './config/db.js'
 import authRoutes from './routes/authRoutes.js'
+import messageRoutes from './routes/messageRoutes.js'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api/auth', authRoutes);
+app.use('/api/messages', messageRoutes);
 
 app.get('/', (_, res) => {
     res.send("API Running!");
