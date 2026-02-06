@@ -51,7 +51,7 @@ const LoginPage = () => {
           />
           <button
             type="button"
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/60 cursor-pointer"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
