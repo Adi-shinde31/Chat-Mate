@@ -3,11 +3,7 @@ import { User, LogOut } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 
 const Navbar = () => {
-    const { logout, authUser } = useAuthStore();
-
-    const handleLogout = async () => {
-        await logout();
-    };
+    const { logout, authUser, isLoggingOut } = useAuthStore();
 
     return (
         <header className="navbar bg-base-100 shadow-md px-4">
@@ -19,28 +15,32 @@ const Navbar = () => {
             </div>
 
             {/* Right */}
-            <div className="flex items-center gap-3">
-                {authUser && (
-                    <>
-                        {/* Logout */}
-                        <button
-                            type="button"
-                            onClick={handleLogout}
-                            className="btn btn-ghost flex items-center gap-2 text-error"
-                        >
-                            <LogOut className="w-4 h-4" />
-                            Logout
-                        </button>
+            {authUser && (
+                <div className="flex items-center gap-2">
+                    {/* Profile */}
+                    <Link
+                        to="/profile"
+                        className="btn btn-ghost btn-circle tooltip tooltip-bottom"
+                        data-tip="Profile"
+                    >
+                        <User className="w-5 h-5" />
+                    </Link>
 
-                        {/* Profile */}
-                        <Link to="/profile" className="btn btn-ghost btn-circle avatar">
-                            <div className="w-10 rounded-full bg-primary text-primary-content flex items-center justify-center">
-                                <User />
-                            </div>
-                        </Link>
-                    </>
-                )}
-            </div>
+                    {/* Logout */}
+                    <button
+                        onClick={logout}
+                        disabled={isLoggingOut}
+                        className="btn btn-ghost btn-circle tooltip tooltip-bottom text-error"
+                        data-tip="Logout"
+                    >
+                        {isLoggingOut ? (
+                            <span className="loading loading-spinner loading-sm" />
+                        ) : (
+                            <LogOut className="w-5 h-5" />
+                        )}
+                    </button>
+                </div>
+            )}
         </header>
     );
 };
