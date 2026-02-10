@@ -74,7 +74,7 @@ export function MessageInput() {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Type a message..."
+          placeholder="Type a message or attach an image (File Size: Max 75kb)..."
           className="input input-bordered flex-1"
         />
 
