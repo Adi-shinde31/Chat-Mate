@@ -10,14 +10,24 @@ const io = new Server(server, {
     },
 });
 
-io.on("connection", (socket) => {
-    console.log("A user connected: " + socket.id);
+export function getReceiverSocketId(receiverId) {
+    return userSockerMap[receiverId];
+}
 
+const userSockerMap = {};
+
+io.on("connection", (socket) => {
+    const userId = socket.handshake.query.userId;
+    if (userId) {
+        userSockerMap[userId] = socket.id;
+    }
+
+    io.emit("getOnlineUsers", Object.keys(userSockerMap));
+    
     socket.on("disconnect", () => {
-        console.log("A user disconnected: " + socket.id);
+        delete userSockerMap[userId];
+        io.emit("getOnlineUsers", Object.keys(userSockerMap));
     });
 });
-
-
 
 export { io, server, app };

@@ -11,6 +11,8 @@ export function ChatContainer() {
     isMessagesLoading,
     messages,
     getMessages,
+    subscribeToNewMessages,
+    unsubscribeFromNewMessages
   } = useChatStore();
 
   const { authUser } = useAuthStore();
@@ -19,8 +21,12 @@ export function ChatContainer() {
   useEffect(() => {
     if (selectedUser?._id) {
       getMessages(selectedUser._id);
+      subscribeToNewMessages();
+      return () => {
+        unsubscribeFromNewMessages();
+      };
     }
-  }, [selectedUser?._id, getMessages]);
+  }, [selectedUser?._id, getMessages, subscribeToNewMessages, unsubscribeFromNewMessages]);
 
   // Auto-scroll
   useEffect(() => {
@@ -44,10 +50,6 @@ export function ChatContainer() {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
         {messages.map((msg) => {
-            console.log({
-    sender: String(msg.senderId),
-    me: String(authUser._id),
-  });
           const isMe = String(msg.senderId) === String(authUser._id);
 
           return (

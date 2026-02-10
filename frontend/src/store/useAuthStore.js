@@ -13,6 +13,7 @@ export const useAuthStore = create((set, get) => ({
     isUpdatingProfile: false,
     isCheckingAuth: true,
     socket: null,
+    onlineUsers: [],
 
     checkAuth: async () => {
         try {
@@ -85,15 +86,20 @@ export const useAuthStore = create((set, get) => ({
         const { authUser } = get();
         if (!authUser || get().socket?.connected) return;
         
-        const socket = io('http://localhost:3000');
+        const socket = io('http://localhost:3000', {
+            query: { userId: authUser._id },
+        });
         socket.connect();
         set({ socket: socket });
+        socket.on("getOnlineUsers", (users) => {
+            set({ onlineUsers: users });
+        });
     },
 
     disconnectSocket: () => {
         if (get().socket?.connected) {
             get().socket.disconnect();
-            // set({ socket: null });
+            set({ socket: null });
         }
     }
 }));

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import toast from "react-hot-toast";
 
 import { axiosInstance } from '../lib/axios.js';
+import { useAuthStore } from './useAuthStore.js';
 
 export const useChatStore = create((set, get) => ({
     message: [],
@@ -11,42 +12,42 @@ export const useChatStore = create((set, get) => ({
     isMessagesLoading: true,
 
     getUsers: async () => {
-        set({isUsersLoading: true});
-        try{
+        set({ isUsersLoading: true });
+        try {
             const res = await axiosInstance.get('/messages/users');
-            set({users: res.data})
+            set({ users: res.data })
         } catch (e) {
             toast.error(e.response.data.message);
-        } finally{
-            set({isUsersLoading:false})
+        } finally {
+            set({ isUsersLoading: false })
         }
     },
 
     getMessages: async (userId) => {
-        set({isMessagesLoading: true});
-        try{
+        set({ isMessagesLoading: true });
+        try {
             const res = await axiosInstance.get(`/messages/${userId}`);
-            set({messages: res.data})
+            set({ messages: res.data })
         } catch (e) {
             toast.error(e.response.data.message);
-        } finally{
-            set({isMessagesLoading:false})
+        } finally {
+            set({ isMessagesLoading: false })
         }
     },
 
     setSelectedUser: (selectedUser) => {
-        set({selectedUser});
+        set({ selectedUser });
     },
 
     clearSelectedUser: () => {
-        set({selectedUser: null});
+        set({ selectedUser: null });
     },
 
     sendMessage: async (messageData) => {
         const { selectedUser, messages } = get();
-        try{
+        try {
             const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
-            set((state) => ({messages: [...state.messages, res.data]}));
+            set((state) => ({ messages: [...state.messages, res.data] }));
         } catch (e) {
             toast.error(e.response.data.message);
         }
@@ -54,16 +55,45 @@ export const useChatStore = create((set, get) => ({
 
 
     updateProfile: async (data) => {
-        set({isUpdatingProfile: true});
-        try{
+        set({ isUpdatingProfile: true });
+        try {
             const res = await axiosInstance.put('/auth/update-profile', data);
-            set({authUser: res.data});
+            set({ authUser: res.data });
             toast.success('Profile Updated Successfully');
         } catch (e) {
             toast.error(e.response.data.message);
-        } finally{
-            set({isUpdatingProfile: false});
+        } finally {
+            set({ isUpdatingProfile: false });
         }
     },
+
+    subscribeToNewMessages: () => {
+        const socket = useAuthStore.getState().socket;
+        if (!socket) return;
+
+        socket.off("newMessage");
+
+        socket.on("newMessage", (newMessage) => {
+            const { selectedUser } = get();
+            if (!selectedUser) return;
+
+            const isRelevant =
+                newMessage.senderId === selectedUser._id ||
+                newMessage.receiverId === selectedUser._id;
+
+            if (!isRelevant) return;
+
+            set((state) => ({
+                messages: [...state.messages, newMessage],
+            }));
+        });
+    },
+
+
+    unsubscribeFromNewMessages: () => {
+        const socket = useAuthStore.getState().socket;
+        if (!socket) return;
+        socket.off("newMessage");
+    }
 
 }))
