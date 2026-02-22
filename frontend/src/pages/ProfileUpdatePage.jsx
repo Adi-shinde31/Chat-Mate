@@ -23,7 +23,7 @@ const ProfileUpdatePage = () => {
     if (!authUser) return null;
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-base-200">
+        <div className="flex-1 flex items-center justify-center bg-base-200 p-4">
             {/* Card container */}
             <div className="card w-full max-w-md bg-base-100 shadow-xl">
                 <div className="card-body items-center text-center gap-4">

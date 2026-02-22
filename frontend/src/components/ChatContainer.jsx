@@ -37,12 +37,23 @@ export function ChatContainer() {
 
   if (isMessagesLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        Loading messages...
+      <div className="h-full flex flex-col min-h-0 bg-base-100">
+        <ChatHeader />
+
+        <div className="flex-1 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <span className="loading loading-spinner loading-lg text-primary"></span>
+            <p className="text-sm text-base-content/60">
+              Loading messages...
+            </p>
+          </div>
+        </div>
+
+        <MessageInput />
       </div>
     );
   }
-
+  
   return (
     <div className="h-full flex flex-col min-h-0 bg-base-100">
       <ChatHeader />
