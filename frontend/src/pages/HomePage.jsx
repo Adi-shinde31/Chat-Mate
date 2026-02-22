@@ -11,18 +11,15 @@ const HomePage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="h-screen flex overflow-hidden bg-base-100">
+    <div className="flex-1 flex overflow-hidden bg-base-100 min-h-0">
 
-      {/* Sidebar */}
       <Sidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      {/* Main Chat Area */}
-      <main className="flex-1 flex flex-col relative">
+      <main className="flex-1 flex flex-col min-h-0 relative">
 
-        {/* Mobile Top Bar */}
         <div className="lg:hidden h-14 flex items-center px-4 border-b border-base-300">
           <button onClick={() => setIsSidebarOpen(true)}>
             <Menu size={22} />
@@ -30,8 +27,7 @@ const HomePage = () => {
           <h1 className="ml-3 font-semibold">Contacts</h1>
         </div>
 
-        {/* Chat Content */}
-        <div className="flex-1 flex">
+        <div className="flex-1 min-h-0">
           {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
         </div>
 
@@ -39,5 +35,4 @@ const HomePage = () => {
     </div>
   );
 };
-
 export default HomePage;

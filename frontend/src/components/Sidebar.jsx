@@ -42,7 +42,7 @@ export function Sidebar({ isOpen, onClose }) {
       <aside
         className={`
           fixed lg:static z-50
-          h-screen w-64 border-r border-gray-200
+          h-full w-64 border-r border-gray-200
           bg-base-100 p-4 flex flex-col
           transform transition-transform duration-300
           ${isOpen ? "translate-x-0" : "-translate-x-full"}

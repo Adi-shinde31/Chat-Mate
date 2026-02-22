@@ -44,7 +44,7 @@ export function ChatContainer() {
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-base-100">
+    <div className="h-full flex flex-col min-h-0 bg-base-100">
       <ChatHeader />
 
       {/* Messages */}

@@ -23,15 +23,18 @@ function App() {
   )
 
   return (
-    <div>
+    <div className="h-[100dvh] flex flex-col overflow-hidden">
+
       <Navbar />
 
-      <Routes>
-        <Route path='/' element={authUser ? <HomePage /> : <Navigate to='/login' />} />
-        <Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to='/' />} />
-        <Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to='/' />} />
-        <Route path='/profile' element={authUser ? <ProfileUpdatePage /> : <Navigate to='/login' />} />
-      </Routes>
+      <div className="flex-1 flex min-h-0">
+        <Routes>
+          <Route path='/' element={authUser ? <HomePage /> : <Navigate to='/login' />} />
+          <Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to='/' />} />
+          <Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to='/' />} />
+          <Route path='/profile' element={authUser ? <ProfileUpdatePage /> : <Navigate to='/login' />} />
+        </Routes>
+        </div>
 
       <Toaster />
     </div>

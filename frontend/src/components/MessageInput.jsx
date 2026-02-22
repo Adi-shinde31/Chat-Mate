@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { Image, Send, X } from "lucide-react";
+import toast from "react-hot-toast";
+
 import { useChatStore } from "../store/useChatStore";
 
 export function MessageInput() {
@@ -29,14 +31,26 @@ export function MessageInput() {
     }
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file || !file.type.startsWith("image/")) return;
+const handleImageChange = (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => setImagePreview(reader.result);
-    reader.readAsDataURL(file);
-  };
+  const MAX_SIZE = 75 * 1024;
+
+  if (!file.type.startsWith("image/")) {
+    toast.error("Only image files are allowed.");
+    return;
+  }
+
+  if (file.size > MAX_SIZE) {
+    toast.error("Image must be smaller than 75KB.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onloadend = () => setImagePreview(reader.result);
+  reader.readAsDataURL(file);
+};
 
   const removeImage = () => {
     setImagePreview(null);
